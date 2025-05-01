@@ -1,0 +1,77 @@
+/* === Estilo geral da página === */
+body, .stApp {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', sans-serif;
+    scroll-behavior: smooth;
+}
+
+/* === Área principal do chat === */
+.stChatMessage {
+    padding: 0.6rem 1rem;
+    margin: 0.4rem 0;
+    border-radius: 1rem;
+    max-width: 90%;
+    word-wrap: break-word;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    transition: all 0.2s ease-in-out;
+}
+
+.stChatMessage.user {
+    background-color: #0059b3;
+    color: white;
+    align-self: flex-end;
+    text-align: right;
+}
+
+.stChatMessage.assistant {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+    border-left: 4px solid #00c87b;
+}
+
+/* === Efeito de entrada suave === */
+.stMarkdown {
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* === Imagem enviada === */
+img {
+    border-radius: 1rem;
+    margin-top: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* === Botões e inputs === */
+button[kind="primary"] {
+    background-color: #00c87b !important;
+    color: white !important;
+    border-radius: 8px;
+}
+
+input[type="file"] {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border-radius: 8px;
+    padding: 0.5rem;
+}
+
+/* === Barra de rolagem customizada === */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #1e1e1e;
+}
+::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}

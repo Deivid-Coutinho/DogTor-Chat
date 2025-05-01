@@ -1,0 +1,27 @@
+🔮 Futuras Melhorias
+Embora o projeto DogTor Chat esteja funcional e completo em sua proposta inicial, há diversas melhorias e expansões que podem ser implementadas para aumentar sua robustez, escalabilidade e usabilidade. Algumas sugestões incluem:
+
+1. Treinamento com base de dados maior e diversificada
+Aumentar a base de imagens de cães com diferentes doenças, raças e condições ambientais para melhorar a generalização do modelo.
+
+2. Implementação de feedback do usuário
+Adicionar uma funcionalidade para que usuários possam confirmar se o diagnóstico foi correto, gerando dados de validação contínua.
+
+3. Armazenamento em nuvem e escalabilidade
+Migrar o banco de dados e os modelos para serviços em nuvem como AWS, GCP ou Azure, permitindo que o sistema escale para muitos usuários simultâneos.
+
+4. Histórico por usuário
+Criar sistema de autenticação simples para salvar o histórico de interações por usuário, permitindo acompanhamento de diagnósticos anteriores.
+
+5. Processamento assíncrono de imagens
+Melhorar a performance do sistema permitindo que o envio de imagens não trave a interface, utilizando filas ou threads.
+
+6. Suporte a múltiplas línguas
+Internacionalizar a interface e as respostas da IA para ampliar o público-alvo.
+
+7. Dashboard administrativo
+Criar um painel exclusivo para administradores com estatísticas detalhadas, gerenciamento de dados e feedbacks dos usuários.
+
+8. Integração com veterinários reais
+Estabelecer parceria com profissionais da área para uma segunda opinião sobre os diagnósticos gerados pela IA.
+

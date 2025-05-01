@@ -6,7 +6,7 @@ from modelo import CNN, device
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import pandas as pd
 import matplotlib.pyplot as plt
-from database import init_db, salvar_resultado, carregar_estatisticas  # ✅ IMPORTADO
+from database import init_db, salvar_resultado, carregar_estatisticas
 
 # Configuração da página
 st.set_page_config(page_title="DogTor Chat", layout="centered")
@@ -42,9 +42,15 @@ transform = transforms.Compose([
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Carrega modelo de linguagem
+# Carrega modelo de linguagem com autenticação Hugging Face
 @st.cache_resource(show_spinner=True)
 def load_gemma_model():
+    import os
+    from huggingface_hub import login
+
+    # Login com token secreto da Hugging Face
+    login(token=st.secrets["huggingface_token"])
+
     tokenizer = AutoTokenizer.from_pretrained("google/gemma-2b-it", revision="float16", trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(
         "google/gemma-2b-it", torch_dtype=torch.float16, device_map="auto"

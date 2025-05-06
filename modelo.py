@@ -1,9 +1,6 @@
 import torch
 import torch.nn as nn
 
-# Verifica se há GPU disponível
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
 # Define o modelo CNN
 class CNN(nn.Module):
     def __init__(self):
@@ -28,3 +25,16 @@ class CNN(nn.Module):
         x = self.conv(x)
         x = self.fc(x)
         return x
+
+# Função para selecionar o dispositivo com fallback
+def get_device():
+    if torch.cuda.is_available():
+        try:
+            torch.cuda.empty_cache()
+            _ = torch.cuda.memory_allocated()
+            return torch.device("cuda")
+        except:
+            pass
+    return torch.device("cpu")
+
+device = get_device()

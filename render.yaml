@@ -3,8 +3,7 @@ services:
     name: dogtor-chat
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: streamlit run app.py
+    startCommand: exec streamlit run app.py --server.port=$PORT --server.address=0.0.0.0
     envVars:
-      - key: huggingface_token
-        value: ${HUGGINGFACE_TOKEN}
-
+      - key: HUGGINGFACE_TOKEN
+        sync: false

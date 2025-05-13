@@ -9,6 +9,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from database import init_db, salvar_resultado, carregar_estatisticas
 import torch.nn.functional as F
+import os  # Adicionado para ler variável de ambiente
 
 # Configurações iniciais
 hf_logging.set_verbosity_error()
@@ -54,10 +55,11 @@ if "gemma_model" not in st.session_state:
 
 # Função para carregar modelo Gemma
 def carregar_modelo_gemma():
-    if "huggingface_token" not in st.secrets:
-        st.error("Token do Hugging Face não encontrado.")
+    hf_token = os.getenv("HUGGINGFACE_TOKEN")
+    if not hf_token:
+        st.error("Token do Hugging Face não encontrado nas variáveis de ambiente.")
         st.stop()
-    login(token=st.secrets["huggingface_token"])
+    login(token=hf_token)
     try:
         tokenizer = AutoTokenizer.from_pretrained("google/gemma-2b-it", revision="float16", trust_remote_code=True)
         model = AutoModelForCausalLM.from_pretrained(

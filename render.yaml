@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: dogtor-chat
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run app.py
+    envVars:
+      - key: huggingface_token
+        value: ${HUGGINGFACE_TOKEN}
+

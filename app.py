@@ -8,6 +8,7 @@ from huggingface_hub import login
 import pandas as pd
 import matplotlib.pyplot as plt
 from database import init_db, salvar_resultado, carregar_estatisticas
+import torch.nn.functional as F
 
 # Configurações iniciais
 hf_logging.set_verbosity_error()
@@ -97,13 +98,22 @@ def chat_with_gemma(user_input):
         response = response.strip()
     return response if response else "Desculpe, não consegui entender. Pode repetir?"
 
-# Exibição do histórico da conversa
-for msg in st.session_state.messages:
+# Exibição invertida do histórico da conversa
+for msg in reversed(st.session_state.messages):
     with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
+        if msg.get("type") == "image":
+            st.image(msg["content"], caption="Imagem enviada", width=250)
+        else:
+            st.markdown(msg["content"])
 
-# Entrada de texto
-user_input = st.chat_input("Digite uma mensagem ou envie uma imagem...")
+# Entrada de texto e imagem integradas
+col1, col2 = st.columns([5, 1])
+with col1:
+    user_input = st.chat_input("Digite uma mensagem...")
+with col2:
+    uploaded_file = st.file_uploader(" ", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
+
+# Processamento do texto
 if user_input:
     st.session_state.messages.append({"role": "user", "content": user_input})
     with st.chat_message("user"):
@@ -112,34 +122,38 @@ if user_input:
     with st.chat_message("assistant"):
         with st.spinner("Pensando..."):
             if any(word in user_input.lower() for word in ["imagem", "foto"]):
-                reply = "📌 Para enviar uma imagem, use o botão abaixo."
+                reply = "📌 Para enviar uma imagem, use o botão à direita da barra de mensagens."
             else:
                 reply = chat_with_gemma(user_input)
             st.markdown(reply)
 
     st.session_state.messages.append({"role": "assistant", "content": reply})
 
-# Upload de imagem
-uploaded_file = st.file_uploader("📷 Enviar imagem para análise", type=["jpg", "jpeg", "png"])
+# Processamento da imagem
 if uploaded_file and model_cnn:
     image = Image.open(uploaded_file).convert("RGB")
     input_tensor = transform(image).unsqueeze(0).to(device_to_use)
 
     with torch.no_grad():
         output = model_cnn(input_tensor)
+        probs = F.softmax(output, dim=1)
+        confidence = probs.max().item() * 100
         _, predicted = torch.max(output, 1)
         result = labels[predicted.item()]
 
     salvar_resultado(result)
 
-    with st.chat_message("user"):
-        st.image(image, caption="Imagem enviada", use_container_width=True)
+    # Exibe imagem e resultado no chat
+    st.session_state.messages.append({"role": "user", "type": "image", "content": image})
+    st.session_state.messages.append({
+        "role": "assistant",
+        "content": f"🧬 Resultado da imagem: **{result}**\n🎯 Confiança: **{confidence:.2f}%**"
+    })
 
-    reply = f"🧬 Resultado da imagem: **{result}**"
-    with st.chat_message("assistant"):
-        st.markdown(reply)
-
-    st.session_state.messages.append({"role": "assistant", "content": reply})
+    # Geração de resposta automática da IA comentando o resultado
+    with st.spinner("🧠 Interpretando o resultado..."):
+        ia_reply = chat_with_gemma(f"A imagem foi classificada como '{result}' com {confidence:.2f}% de confiança. O que isso significa?")
+    st.session_state.messages.append({"role": "assistant", "content": ia_reply})
 
 elif uploaded_file and not model_cnn:
     st.warning("Modelo não carregado. Não é possível processar a imagem no momento.")

@@ -11,7 +11,7 @@ transform = transforms.Compose([
     transforms.Resize((128, 128)),
     transforms.RandomHorizontalFlip(),
     transforms.ColorJitter(brightness=0.2, contrast=0.2),
-    transforms.RandomRotation(15),
+    transforms.RandomRotation(10),
     transforms.ToTensor()
 ])
 
@@ -28,7 +28,7 @@ criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
 # Treinamento
-num_epochs = 15
+num_epochs = 10
 for epoch in range(num_epochs):
     running_loss = 0.0
     for inputs, labels in dataloader:

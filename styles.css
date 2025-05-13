@@ -45,6 +45,8 @@ img {
     border-radius: 1rem;
     margin-top: 1rem;
     box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    max-height: 250px;
+    object-fit: contain;
 }
 
 /* === Botões e inputs === */
@@ -59,6 +61,21 @@ input[type="file"] {
     color: #e0e0e0;
     border-radius: 8px;
     padding: 0.5rem;
+}
+
+/* === Ajustes visuais para o chat moderno === */
+.css-1a32fsj {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.css-1cpxqw2 {
+    padding: 10px !important;
+}
+
+.css-1cpxqw2 input {
+    font-size: 14px !important;
 }
 
 /* === Barra de rolagem customizada === */

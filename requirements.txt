@@ -1,12 +1,11 @@
+fastapi
+uvicorn
+jinja2
 torch
 torchvision
-transformers==4.40.1
-streamlit
-scikit-learn
 pillow
 matplotlib
-numpy
 pandas
-tokenizers==0.19.1
+scikit-learn
 seaborn
-huggingface-hub
+llama-cpp-python==0.2.24

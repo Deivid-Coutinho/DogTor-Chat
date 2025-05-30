@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>DogTor Chat</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div id="main-container">
+        <h2 class="title">🧠 DogTor Chat</h2>
+        <div id="chat-box">
+            <!-- Mensagem inicial do DogTor -->
+            <div class="bot-msg"><strong>DogTor:</strong> Olá! Como posso te ajudar hoje?</div>
+        </div>
+
+        <form id="input-form">
+            <input type="text" id="text-input" placeholder="Digite sua mensagem..." autocomplete="off" />
+            <label for="image-input" id="upload-btn">📎</label>
+            <input type="file" id="image-input" accept="image/*" hidden />
+            <button type="submit" id="send-btn">Enviar</button>
+            <button type="button" onclick="mostrarGrafico()">📊 Ver Estatísticas</button>
+        </form>
+        <div id="grafico-container" style="margin-top: 15px;"></div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById("chat-box");
+        const textInput = document.getElementById("text-input");
+        const form = document.getElementById("input-form");
+        const imageInput = document.getElementById("image-input");
+
+        function appendMessage(sender, message) {
+            const msgDiv = document.createElement("div");
+            msgDiv.className = sender === "user" ? "user-msg" : "bot-msg";
+            msgDiv.innerHTML = `<strong>${sender === "user" ? "Você" : "DogTor"}:</strong> ${message}`;
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const message = textInput.value.trim();
+            if (!message) return;
+
+            appendMessage("user", message);
+            textInput.value = "";
+
+            const response = await fetch("/message", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message }),
+            });
+            const data = await response.json();
+            appendMessage("bot", data.response);
+        });
+
+        imageInput.addEventListener("change", async () => {
+            const file = imageInput.files[0];
+            if (!file) return;
+
+            // Mostrar a imagem enviada no chat (reduzida)
+            const reader = new FileReader();
+            reader.onload = () => {
+                const imgTag = `<img src="${reader.result}" width="150" style="margin-top: 5px; border-radius: 6px;" />`;
+                appendMessage("user", `📷 Imagem enviada para análise.<br>${imgTag}`);
+            };
+            reader.readAsDataURL(file);
+
+            const formData = new FormData();
+            formData.append("image", file);
+
+            const response = await fetch("/upload", {
+                method: "POST",
+                body: formData,
+            });
+            const data = await response.json();
+            appendMessage("bot", data.response);
+        });
+
+        async function mostrarGrafico() {
+        const resposta = await fetch("/grafico");
+        const dados = await resposta.json();
+        if (dados.grafico) {
+        const container = document.getElementById("grafico-container");
+        container.innerHTML = `<img src="data:image/png;base64,${dados.grafico}" width="400" style="border-radius: 8px;" />`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+        } else {
+        appendMessage("bot", "Não foi possível gerar o gráfico de diagnósticos.");
+            }
+        }
+
+    </script>
+</body>
+</html>

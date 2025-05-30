@@ -1,9 +1,0 @@
-services:
-  - type: web
-    name: dogtor-chat
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: exec streamlit run app.py --server.port=$PORT --server.address=0.0.0.0
-    envVars:
-      - key: HUGGINGFACE_TOKEN
-        sync: false

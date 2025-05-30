@@ -1,8 +1,6 @@
-# 🐶 DogTorChat
+ 🐶 DogTorChat
 
-Aplicativo com IA que detecta doenças em imagens de cães e responde em formato de chat com linguagem natural.
-
----
+DogTor Chat é um assistente veterinário inteligente que utiliza visão computacional e linguagem natural para auxiliar na triagem de doenças em cães por meio de imagens e conversas em português.
 
 ## 📦 Organização do Projeto
 
@@ -19,6 +17,10 @@ Aplicativo com IA que detecta doenças em imagens de cães e responde em formato
 
 ## Tecnologias usadas
 
-Python, PyTorch, Streamlit, scikit-learn, Pillow, Pandas, Matplotlib, SQLite, Transformers.
+fastapi, uvicorn, jinja2, torch, torchvision, pillow, matplotlib, pandas, scikit-learn, seaborn, llama-cpp-python==0.2.24
+
+## Para rodar localmente
+
+uvicorn main:app --reload
 
 Desenvolvido por Deivid Coutinho.

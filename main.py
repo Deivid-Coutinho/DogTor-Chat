@@ -88,7 +88,7 @@ async def process_image(image: UploadFile = File(...)):
     confidence = confidence.item() * 100
     salvar_resultado(result)
 
-    resposta = f"**Resultado:** {result}\n**Confiança:** {confidence:.2f}%"
+    resposta = f"Resultado: {result}\nConfiança: {confidence:.2f}%"
     return JSONResponse({"response": resposta})
 
 # Rota de geração do grafico de estatisticas
